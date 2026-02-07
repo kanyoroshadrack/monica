@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>For You 💌</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(45deg, #ff1a66, #ff3385, #ff66b3);
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        overflow-x: hidden;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 600px;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+        border-radius: 25px;
+        padding: 50px 40px;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .envelope {
+        font-size: 5rem;
+        margin-bottom: 20px;
+        animation: float 3s ease-in-out infinite;
+        color: #ffccdd;
+        text-shadow: 0 0 15px rgba(255, 20, 100, 0.7);
+      }
+
+      .greeting {
+        font-size: 3rem;
+        margin-bottom: 25px;
+        font-weight: 300;
+        letter-spacing: 2px;
+        color: #ffe6ee;
+      }
+
+      .message {
+        font-size: 1.8rem;
+        line-height: 1.6;
+        margin-bottom: 30px;
+        color: #ffd9e6;
+        padding: 0 10px;
+        font-weight: 300;
+      }
+
+      .valentine-question {
+        font-size: 2.5rem;
+        margin: 40px 0;
+        color: #ffebf0;
+        position: relative;
+        display: inline-block;
+      }
+
+      .rose {
+        display: inline-block;
+        margin-left: 10px;
+        animation: rotateRose 4s linear infinite;
+      }
+
+      .heart-dots {
+        font-size: 2rem;
+        margin: 20px 0;
+        color: #ff4d94;
+        letter-spacing: 5px;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 40px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        padding: 20px 50px;
+        font-size: 1.8rem;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        font-weight: bold;
+        position: relative;
+        overflow: hidden;
+        min-width: 200px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      #yesBtn {
+        background: linear-gradient(135deg, #ff0066, #ff3385);
+        color: white;
+      }
+
+      #yesBtn:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 15px 30px rgba(255, 0, 102, 0.4);
+      }
+
+      #noBtn {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+
+      #noBtn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-3px);
+      }
+
+      .response {
+        display: none;
+        margin-top: 40px;
+        padding: 40px 30px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        animation: fadeIn 1s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .response h2 {
+        font-size: 2.8rem;
+        margin-bottom: 25px;
+        color: #ffccdd;
+      }
+
+      .response p {
+        font-size: 1.6rem;
+        line-height: 1.7;
+        color: #ffe6ee;
+        margin-bottom: 20px;
+      }
+
+      .sexy-response {
+        font-size: 1.8rem;
+        line-height: 1.8;
+        color: #ffccdd;
+        margin-top: 25px;
+        font-style: italic;
+        padding: 20px;
+        background-color: rgba(255, 0, 102, 0.15);
+        border-radius: 15px;
+        border-left: 4px solid #ff0066;
+      }
+
+      /* Ring animations */
+      .ring-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .ring {
+        position: absolute;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        animation: ringPulse 8s linear infinite;
+      }
+
+      .ring:nth-child(1) {
+        width: 100px;
+        height: 100px;
+        top: 10%;
+        left: 10%;
+        animation-delay: 0s;
+      }
+
+      .ring:nth-child(2) {
+        width: 150px;
+        height: 150px;
+        bottom: 15%;
+        right: 10%;
+        animation-delay: 1s;
+        border-color: rgba(255, 0, 102, 0.3);
+      }
+
+      .ring:nth-child(3) {
+        width: 80px;
+        height: 80px;
+        top: 50%;
+        left: 5%;
+        animation-delay: 2s;
+        border-color: rgba(255, 204, 221, 0.3);
+      }
+
+      /* Floating hearts */
+      .floating-hearts {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .heart {
+        position: absolute;
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.5);
+        animation: floatHeart linear infinite;
+      }
+
+      /* Make No button move when hovered */
+      .no-moving {
+        transition: transform 0.2s ease;
+      }
+
+      /* Animations */
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+      }
+
+      @keyframes rotateRose {
+        0% {
+          transform: rotate(0deg);
+        }
+        25% {
+          transform: rotate(10deg);
+        }
+        50% {
+          transform: rotate(0deg);
+        }
+        75% {
+          transform: rotate(-10deg);
+        }
+        100% {
+          transform: rotate(0deg);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes ringPulse {
+        0% {
+          transform: scale(0.8);
+          opacity: 0.7;
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 0.3;
+        }
+        100% {
+          transform: scale(0.8);
+          opacity: 0.7;
+        }
+      }
+
+      @keyframes floatHeart {
+        to {
+          transform: translateY(-100vh) rotate(360deg);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* Celebration animation for Yes */
+      @keyframes celebrate {
+        0% {
+          transform: translateY(0) rotate(0deg);
+        }
+        25% {
+          transform: translateY(-20px) rotate(10deg);
+        }
+        50% {
+          transform: translateY(0) rotate(0deg);
+        }
+        75% {
+          transform: translateY(-10px) rotate(-10deg);
+        }
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+      }
+
+      /* Responsive design */
+      @media (max-width: 768px) {
+        .container {
+          padding: 40px 25px;
+        }
+        .greeting {
+          font-size: 2.5rem;
+        }
+        .message {
+          font-size: 1.6rem;
+        }
+        .valentine-question {
+          font-size: 2rem;
+        }
+        button {
+          padding: 18px 40px;
+          font-size: 1.6rem;
+          min-width: 170px;
+        }
+        .response h2 {
+          font-size: 2.2rem;
+        }
+        .response p {
+          font-size: 1.4rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 30px 20px;
+        }
+        .greeting {
+          font-size: 2rem;
+        }
+        .message {
+          font-size: 1.4rem;
+        }
+        .valentine-question {
+          font-size: 1.8rem;
+        }
+        .buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+        button {
+          width: 100%;
+          max-width: 300px;
+        }
+        .envelope {
+          font-size: 4rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="ring-container">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+      </div>
+      <div class="floating-hearts" id="floatingHearts"></div>
+
+      <div class="envelope">💌</div>
+      <h1 class="greeting">Hey Monica</h1>
+      <p class="message">You make my world brighter…</p>
+
+      <div class="valentine-question">
+        Will you be my Valentine? <span class="rose">🌹</span>
+      </div>
+
+      <div class="heart-dots">.❤️.</div>
+
+      <div class="buttons">
+        <button id="yesBtn">Yes 💕</button>
+        <button id="noBtn" class="no-moving">No</button>
+      </div>
+      <p>&copy Shadrack @ 2026</p>
+      <!-- Yes response -->
+      <div id="positiveResponse" class="response">
+        <h2>YES! 🥰</h2>
+        <p>
+          You just made this the best day of my life! I'm smiling so wide right
+          now.
+        </p>
+        <div class="sexy-response">
+          Get ready for a Valentine's Day you'll never forget... I plan to make
+          every moment special, from whispers to passionate touches. I can't
+          wait to hold you close and show you just how much you mean to me.
+          You're my dream come true. 💋
+        </div>
+        <p>from Shadrack</p>
+      </div>
+
+      <!-- No response -->
+      <div id="negativeResponse" class="response">
+        <h2>Thank You</h2>
+        <p>
+          I appreciate your honesty. Even though I hoped for a different answer,
+          I respect your decision.
+        </p>
+        <p>Wishing you a beautiful Valentine's Day filled with happiness. 💐</p>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get elements
+        const yesBtn = document.getElementById("yesBtn");
+        const noBtn = document.getElementById("noBtn");
+        const positiveResponse = document.getElementById("positiveResponse");
+        const negativeResponse = document.getElementById("negativeResponse");
+        const floatingHearts = document.getElementById("floatingHearts");
+        const buttons = document.querySelector(".buttons");
+        const container = document.querySelector(".container");
+
+        // Create floating hearts
+        function createHearts() {
+          for (let i = 0; i < 25; i++) {
+            setTimeout(() => {
+              const heart = document.createElement("div");
+              heart.classList.add("heart");
+              heart.innerHTML = "❤️";
+              heart.style.left = Math.random() * 100 + "vw";
+              heart.style.fontSize = Math.random() * 20 + 10 + "px";
+              heart.style.animationDuration = Math.random() * 15 + 10 + "s";
+              heart.style.animationDelay = Math.random() * 5 + "s";
+              heart.style.opacity = Math.random() * 0.5 + 0.3;
+              floatingHearts.appendChild(heart);
+            }, i * 200);
+          }
+        }
+
+        // Yes button click
+        yesBtn.addEventListener("click", function () {
+          positiveResponse.style.display = "block";
+          negativeResponse.style.display = "none";
+          buttons.style.display = "none";
+
+          // Celebration effects
+          celebrateYes();
+
+          // Change background to more passionate color
+          document.body.style.background =
+            "linear-gradient(45deg, #ff0066, #ff3399, #ff66b3)";
+
+          // Add pulse animation to container
+          container.style.animation = "pulse 1.5s ease 3";
+        });
+
+        // No button click
+        noBtn.addEventListener("click", function () {
+          negativeResponse.style.display = "block";
+          positiveResponse.style.display = "none";
+          buttons.style.display = "none";
+
+          // Change background to more subdued color
+          document.body.style.background =
+            "linear-gradient(45deg, #993366, #cc6699)";
+        });
+
+        // Make No button move when trying to hover
+        noBtn.addEventListener("mouseover", function () {
+          const maxX = 100;
+          const maxY = 50;
+          const randomX = Math.random() * maxX * (Math.random() > 0.5 ? 1 : -1);
+          const randomY = Math.random() * maxY * (Math.random() > 0.5 ? 1 : -1);
+
+          noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        });
+
+        noBtn.addEventListener("mouseout", function () {
+          setTimeout(() => {
+            noBtn.style.transform = "translate(0, 0)";
+          }, 300);
+        });
+
+        // Celebration function for Yes response
+        function celebrateYes() {
+          // Add more hearts
+          for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+              const heart = document.createElement("div");
+              heart.classList.add("heart");
+              heart.innerHTML = "💖";
+              heart.style.left = Math.random() * 100 + "vw";
+              heart.style.fontSize = Math.random() * 25 + 15 + "px";
+              heart.style.animationDuration = Math.random() * 8 + 5 + "s";
+              heart.style.opacity = Math.random() * 0.7 + 0.3;
+              heart.style.color = "#ff0066";
+              floatingHearts.appendChild(heart);
+            }, i * 100);
+          }
+
+          // Create ring explosion effect
+          createRingExplosion();
+
+          // Add celebrate animation to envelope and rose
+          document.querySelector(".envelope").style.animation =
+            "celebrate 1s ease 3";
+          document.querySelector(".rose").style.animation =
+            "celebrate 1s ease 3, rotateRose 4s linear infinite";
+        }
+
+        // Create ring explosion effect
+        function createRingExplosion() {
+          const ringContainer = document.querySelector(".ring-container");
+
+          for (let i = 0; i < 8; i++) {
+            setTimeout(() => {
+              const ring = document.createElement("div");
+              ring.classList.add("ring");
+              ring.style.width = "50px";
+              ring.style.height = "50px";
+              ring.style.left = "50%";
+              ring.style.top = "50%";
+              ring.style.border = "3px solid gold";
+              ring.style.animation = "ringExplode 1.5s ease-out forwards";
+              ringContainer.appendChild(ring);
+
+              // Remove ring after animation
+              setTimeout(() => {
+                ring.remove();
+              }, 1500);
+            }, i * 150);
+          }
+
+          // Add CSS for ring explosion
+          const style = document.createElement("style");
+          style.textContent = `
+                    @keyframes ringExplode {
+                        0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+                        100% { transform: translate(-50%, -50%) scale(15); opacity: 0; }
+                    }
+                `;
+          document.head.appendChild(style);
+        }
+
+        // Initialize floating hearts
+        createHearts();
+      });
+    </script>
+  </body>
+</html>
